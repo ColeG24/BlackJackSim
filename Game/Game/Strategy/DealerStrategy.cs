@@ -9,7 +9,7 @@ using Game.participants.actions;
 
 namespace Game.Strategy
 {
-    class DealerStrategy : AbstractStrategy
+    public class DealerStrategy : AbstractStrategy
     {
         public override decimal BetAmount(int count)
         {
@@ -18,10 +18,14 @@ namespace Game.Strategy
 
         public override HandAction DetermineActionForHand(int count, Hand hand, Card upCard)
         {
-            if (hand.Value < 17 && hand.IsSoft == true)
+            if (hand.Value > 17)
             {
                 return HandAction.STAND;
             } 
+            else if (hand.Value == 17 && hand.IsSoft == false)
+            {
+                return HandAction.STAND;
+            }
             else
             {
                 return HandAction.HIT;

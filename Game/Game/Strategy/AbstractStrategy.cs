@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Game.Strategy
 {
-    abstract class AbstractStrategy
+    public abstract class AbstractStrategy
     {
         public abstract HandAction DetermineActionForHand(int count, Hand hand, Card upCard);
 

@@ -48,19 +48,31 @@ namespace Game.cards
 
         public Card Draw()
         {
+            if (currentDeckState.Count < 1)
+            {
+                throw new DeckOutOFCardsException();
+            }
             Card card = currentDeckState.ElementAt(0);
             currentDeckState.RemoveAt(0);
             return card;
         }
 
-        //private static Dictionary<CardType, int> NoCountSytem()
-        //{
-        //    Dictionary<CardType, int> countSystem = new Dictionary<CardType, int>();
-        //    foreach (CardType type in Enum.GetValues(typeof(CardType)))
-        //    {
-        //        countSystem.Add(type, 0);
-        //    }
-        //    return countSystem;
-        //}
+        public int CardsLeft()
+        {
+            return currentDeckState.Count;
+        }
+
+    }
+
+
+    [Serializable]
+    public class DeckOutOFCardsException : Exception
+    {
+        public DeckOutOFCardsException() { }
+        public DeckOutOFCardsException(string message) : base(message) { }
+        public DeckOutOFCardsException(string message, Exception inner) : base(message, inner) { }
+        protected DeckOutOFCardsException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

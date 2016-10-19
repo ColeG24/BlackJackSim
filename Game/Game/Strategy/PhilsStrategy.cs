@@ -69,7 +69,7 @@ namespace Game.Strategy
                 {
                     if ((int)upCard.GetCardValue() == 5 || (int)upCard.GetCardValue() == 6)
                     {
-                        return HandAction.DOUBLE;
+                        return HandAction.DOUBLE_DOWN;
                     }
                     else
                         return HandAction.HIT;
@@ -78,7 +78,7 @@ namespace Game.Strategy
                 {
                     if ((int)upCard.GetCardValue() == 5 || (int)upCard.GetCardValue() == 6)
                     {
-                        return HandAction.DOUBLE;
+                        return HandAction.DOUBLE_DOWN;
                     }
                     else
                         return HandAction.HIT;
@@ -89,7 +89,7 @@ namespace Game.Strategy
             {
                 if ((int)upCard.GetCardValue() >= 2 || (int)upCard.GetCardValue() <= 6)
                 {
-                    return HandAction.DOUBLE;
+                    return HandAction.DOUBLE_DOWN;
                 }
                 else
                     return HandAction.HIT;
@@ -99,7 +99,7 @@ namespace Game.Strategy
             {
                 if ((int)upCard.GetCardValue() >= 2 || (int)upCard.GetCardValue() <= 9)
                 {
-                    return HandAction.DOUBLE;
+                    return HandAction.DOUBLE_DOWN;
                 }
                 else
                     return HandAction.HIT;
@@ -107,7 +107,7 @@ namespace Game.Strategy
 
             else if (hand.Value == 11)
             {
-                return HandAction.DOUBLE;
+                return HandAction.DOUBLE_DOWN;
             }
 
             else if (hand.Value == 12)
@@ -125,12 +125,15 @@ namespace Game.Strategy
                 {
                     if (upCard.GetCardValue().Equals(CardType.ACE) || (int)upCard.GetCardValue() == 6)
                     {
-                        return HandAction.DOUBLE;
+                        return HandAction.DOUBLE_DOWN;
                     }
                     else
                         return HandAction.HIT;
                 }
             }
+            //TODO 
+            throw new NotImplementedException();
+
         }
 
         public override int GetCountValueOfCard(Card card)
