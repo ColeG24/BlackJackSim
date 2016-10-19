@@ -83,7 +83,7 @@ namespace Game.Strategy
 
         public override int GetCountValueOfCard(Card card)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         public override bool TakeInsurance(int count, Hand hand)
@@ -105,6 +105,7 @@ namespace Game.Strategy
             else
                 return HandAction.HIT;
         }
+
         public HandAction handValue6(int count, Hand hand, Card upCard)
         {
             if (hand.CanSplit())

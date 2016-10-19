@@ -21,7 +21,7 @@ namespace BlackJackConsoleApp
             IList<Player> players = new List<Player>();
             players.Add(player1);
             players.Add(player2);
-            BlackJackGame game = new BlackJackGame(1000, players, deck, 50.0);
+            BlackJackGame game = new BlackJackGame(100000, players, deck, 50.0);
 
             foreach(Player player in players)
             {

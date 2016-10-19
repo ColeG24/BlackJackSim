@@ -12,9 +12,12 @@ namespace Game
     public class BlackJackGame
     {
         private IList<Player> players;
+        private int roundsToPlay;
+
         public BlackJackGame(int roundsToPlay, IList<Player> players, Deck deck, double penetrationPercent)
         {
             this.players = players;
+            this.roundsToPlay = roundsToPlay;
 
             double initialDeckSize = deck.CardsLeft();
             double penetrationAsDouble = penetrationPercent / 100;      
@@ -34,6 +37,10 @@ namespace Game
                 if (currentPenetration > penetrationAsDouble)
                 {
                     deck.ShuffleDeck();
+                    foreach (Player player in players)
+                    {
+                        player.ResetCount();
+                    }
                 }
 
                 dealer.DoInitialDraw();
@@ -119,6 +126,39 @@ namespace Game
 
                 roundsToPlay--;
             }
+        }
+
+        public double ApproximateHoursOfPlay() // According to some website
+        {
+            int numberOfPlayers = players.Count;
+            double roundsPerHour;
+            switch (numberOfPlayers) 
+            {
+                case 1:
+                    roundsPerHour = 209;
+                    break;
+                case 2:
+                    roundsPerHour = 139;
+                    break;
+                case 3:
+                    roundsPerHour = 105;
+                    break;
+                case 4:
+                    roundsPerHour = 84;
+                    break;
+                case 5:
+                    roundsPerHour = 70;
+                    break;
+                case 6:
+                    roundsPerHour = 60;
+                    break;
+                case 7:
+                    roundsPerHour = 52;
+                    break;
+                default:
+                    throw new Exception("Illegal number of players");
+            }
+            return (double)roundsToPlay / roundsPerHour;       
         }
     }
 }
