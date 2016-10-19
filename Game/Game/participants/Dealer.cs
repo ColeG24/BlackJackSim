@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Game.cards;
 using Game.Strategy;
 using Game.cards.logic;
+using Game.participants.actions;
 
 namespace Game.participants
 {
@@ -18,23 +19,31 @@ namespace Game.participants
             private set;
         }
 
-        public Dealer(Deck deck, AbstractStrategy strategy) : base(deck, strategy)
+        public Dealer(Deck deck, DealerStrategy strategy) : base(deck, strategy)
         {
         }
 
         public override void EndRound(int dealerValue, bool isBlackJack)
         {
-            throw new NotImplementedException();
+            FaceUpCard = null;
         }
 
         public override void PlayOutRound()
         {
-            throw new NotImplementedException();
+            while (strategy.DetermineActionForHand(0, hand) != HandAction.STAND)
+            {
+                if (strategy.DetermineActionForHand(0, hand) == HandAction.HIT)
+                {
+                    hand.AddCard(deck.Draw());
+                }
+            }
         }
 
         public override void DoInitialDraw()
         {
-            throw new NotImplementedException();
+            hand.AddCard(deck.Draw());
+            hand.AddCard(deck.Draw());
+            FaceUpCard = hand.GetCards().First();
         }
     }
 }
