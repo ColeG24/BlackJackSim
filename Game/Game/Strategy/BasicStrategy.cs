@@ -201,6 +201,9 @@ namespace Game.Strategy
                 else
                     return HandAction.HIT;
             }
+            //TODO 
+            throw new NotImplementedException();
+
         }
 
         public HandAction handValue14(int count, Hand hand, Card upCard)

@@ -8,7 +8,7 @@ using Game.Strategy;
 
 namespace Game.participants
 {
-    abstract class Participant
+    public abstract class Participant
     {
         protected Deck deck;
         protected AbstractStrategy strategy;

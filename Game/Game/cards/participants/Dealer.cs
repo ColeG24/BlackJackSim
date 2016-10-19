@@ -10,10 +10,16 @@ using Game.participants.actions;
 
 namespace Game.participants
 {
-    class Dealer : Participant
+    public class Dealer : Participant
     {
         private Hand hand = new Hand(0);
         public Card FaceUpCard
+        {
+            get;
+            private set;
+        }
+
+        public int RoundValue
         {
             get;
             private set;
@@ -26,6 +32,8 @@ namespace Game.participants
         public override void EndRound(int dealerValue, bool isBlackJack)
         {
             FaceUpCard = null; // no face up card at the end of round
+            RoundValue = 0;
+            hand = new Hand(0);
         }
 
         public override void PlayOutRound()
@@ -37,6 +45,7 @@ namespace Game.participants
                     hand.AddCard(deck.Draw());
                 }
             }
+            RoundValue = hand.Value;
         }
 
         public override void DoInitialDraw()
@@ -45,5 +54,12 @@ namespace Game.participants
             hand.AddCard(deck.Draw());
             FaceUpCard = hand.GetCards().First();
         }
+
+        public bool CanTakeInsurance()
+        {
+            return FaceUpCard.TypeOfCard == CardType.ACE;
+        }
+
+
     }
 }
