@@ -27,13 +27,32 @@ namespace Game.cards
             ShuffleDeck();
         }
 
+        /// <summary>
+        /// Used to make
+        /// </summary>
+        /// <param name="cards"></param>
         public Deck(List<Card> cards)
         {
             foreach(Card card in cards)
             {
                 originalDeck.Add(card);
             }
-            ShuffleDeck();
+            foreach (Card card in originalDeck)
+            {
+                currentDeckState.Add(card);
+            }
+        }
+
+        /// <summary>
+        /// Resets the deck without shuffling
+        /// </summary>
+        public void ResetDeck()
+        {
+            currentDeckState.Clear();
+            foreach (Card card in originalDeck)
+            {
+                currentDeckState.Add(card);
+            }
         }
 
         public void ShuffleDeck()
@@ -73,7 +92,9 @@ namespace Game.cards
 
     }
 
-
+    /// <summary>
+    /// Thrown when a deck is out of cards
+    /// </summary>
     [Serializable]
     public class DeckOutOFCardsException : Exception
     {
