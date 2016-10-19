@@ -23,11 +23,114 @@ namespace Game.Strategy
 
         public override HandAction DetermineActionForHand(int count, Hand hand, Card upCard)
         {
-            if (hand.Value == 3)
+            if (hand.Value == 4)
             {
-
+                if (hand.CanSplit())
+                {
+                    if ((int)upCard.GetCardValue() >= 3 || (int)upCard.GetCardValue() <= 7)
+                    {
+                        return HandAction.SPLIT;
+                    }
+                    else
+                        return HandAction.HIT;
+                }
+                else
+                    return HandAction.HIT;
             }
-            throw new NotImplementedException();
+
+            else if (hand.Value == 5)
+            {
+                return HandAction.HIT;
+            }
+
+            else if (hand.Value == 6)
+            {
+                if (hand.CanSplit())
+                {
+                    if ((int)upCard.GetCardValue() >= 4 || (int)upCard.GetCardValue() <= 7)
+                    {
+                        return HandAction.SPLIT;
+                    }
+                    else
+                        return HandAction.HIT;
+                }
+                else
+                    return HandAction.HIT;
+            }
+
+            else if (hand.Value == 7)
+            {
+                return HandAction.HIT;
+            }
+
+            else if (hand.Value == 8)
+            {
+                if (hand.CanSplit())
+                {
+                    if ((int)upCard.GetCardValue() == 5 || (int)upCard.GetCardValue() == 6)
+                    {
+                        return HandAction.DOUBLE;
+                    }
+                    else
+                        return HandAction.HIT;
+                }
+                else
+                {
+                    if ((int)upCard.GetCardValue() == 5 || (int)upCard.GetCardValue() == 6)
+                    {
+                        return HandAction.DOUBLE;
+                    }
+                    else
+                        return HandAction.HIT;
+                }
+            }
+
+            else if (hand.Value == 9)
+            {
+                if ((int)upCard.GetCardValue() >= 2 || (int)upCard.GetCardValue() <= 6)
+                {
+                    return HandAction.DOUBLE;
+                }
+                else
+                    return HandAction.HIT;
+            }
+
+            else if (hand.Value == 10)
+            {
+                if ((int)upCard.GetCardValue() >= 2 || (int)upCard.GetCardValue() <= 9)
+                {
+                    return HandAction.DOUBLE;
+                }
+                else
+                    return HandAction.HIT;
+            }
+
+            else if (hand.Value == 11)
+            {
+                return HandAction.DOUBLE;
+            }
+
+            else if (hand.Value == 12)
+            {
+                if (hand.CanSplit())
+                {
+                    if ((int)upCard.GetCardValue() >= 2 || (int)upCard.GetCardValue() <= 6)
+                    {
+                        return HandAction.SPLIT;
+                    }
+                    else
+                        return HandAction.HIT;
+                }
+                else
+                {
+                    if (upCard.GetCardValue().Equals(CardType.ACE) || (int)upCard.GetCardValue() == 6)
+                    {
+                        return HandAction.DOUBLE;
+                    }
+                    else
+                        return HandAction.HIT;
+                }
+            }
         }
 
         public override int GetCountValueOfCard(Card card)

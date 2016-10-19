@@ -22,7 +22,7 @@ namespace Game.cards
             this.TypeOfCard = type;
             this.bjValue = DetermineBjValue(TypeOfCard);
         }
-
+        
         public Object GetCardValue()
         {
             if (TypeOfCard == CardType.ACE)
