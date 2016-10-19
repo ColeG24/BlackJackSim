@@ -8,14 +8,10 @@ namespace Game.cards
 {
     public class Deck
     {
-        private Dictionary<CardType, int> countSystem;
         private IList<Card> originalDeck = new List<Card>();
+        private IList<Card> currentDeckState = new List<Card>();
 
-        public Deck(int numDecks) : this(NoCountSytem(), numDecks)
-        {
-        }
-
-        public Deck(Dictionary<CardType, int> countSystem, int numDecks)
+        public Deck(int numDecks)
         {
             for(int i = 0; i < numDecks; i++)
             {
@@ -23,21 +19,48 @@ namespace Game.cards
                 {
                     foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                     {
-                        Card card = new Card(suit, type, countSystem[type]);
+                        Card card = new Card(suit, type);
                         originalDeck.Add(card);
                     }
                 }
             }
+            ShuffleDeck();
         }
 
-        private static Dictionary<CardType, int> NoCountSytem()
+        public void ShuffleDeck()
         {
-            Dictionary<CardType, int> countSystem = new Dictionary<CardType, int>();
-            foreach (CardType type in Enum.GetValues(typeof(CardType)))
+            Random rng = new Random();
+            int n = originalDeck.Count;
+            while (n > 1)
             {
-                countSystem.Add(type, 0);
+                n--;
+                int k = rng.Next(n + 1);
+                Card value = originalDeck[k];
+                originalDeck[k] = originalDeck[n];
+                originalDeck[n] = value;
             }
-            return countSystem;
+            currentDeckState.Clear();
+            foreach(Card card in originalDeck)
+            {
+                currentDeckState.Add(card);
+            }
         }
+
+        public Card Draw()
+        {
+            Card card = currentDeckState.ElementAt(0);
+            currentDeckState.RemoveAt(0);
+            return card;
+        }
+
+        //private static Dictionary<CardType, int> NoCountSytem()
+        //{
+        //    Dictionary<CardType, int> countSystem = new Dictionary<CardType, int>();
+        //    foreach (CardType type in Enum.GetValues(typeof(CardType)))
+        //    {
+        //        countSystem.Add(type, 0);
+        //    }
+        //    return countSystem;
+        //}
     }
 }

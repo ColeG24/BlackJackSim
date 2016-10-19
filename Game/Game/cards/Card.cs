@@ -9,33 +9,30 @@ namespace Game.cards
     public class Card
     {
         private Suit suit;
-        private CardType cardType;
+        public CardType TypeOfCard
+        {
+            get;
+            private set;
+        }
         private int bjValue;
-        private int countValue;
 
-        public Card(Suit suit, CardType type, int countValue)
+        public Card(Suit suit, CardType type)
         {
             this.suit = suit;
-            this.cardType = type;
-            this.countValue = countValue;
-            this.bjValue = DetermineBjValue(cardType);
+            this.TypeOfCard = type;
+            this.bjValue = DetermineBjValue(TypeOfCard);
         }
 
         public Object GetCardValue()
         {
-            if (cardType == CardType.ACE)
+            if (TypeOfCard == CardType.ACE)
             {
-                return cardType;
+                return TypeOfCard;
             }
             else
             {
                 return bjValue;
             }
-        }
-
-        public int getCountValue()
-        {
-            return countValue;
         }
 
         private int DetermineBjValue(CardType cardType)
