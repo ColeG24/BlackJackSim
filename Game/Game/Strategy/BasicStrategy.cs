@@ -74,9 +74,34 @@ namespace Game.Strategy
             {
                 return handValue14(count, hand, upCard);
             }
+
+            else if (hand.Value == 15)
+            {
+                return handValue15(count, hand, upCard);
+            }
+
+            else if (hand.Value == 16)
+            {
+                return handValue16(count, hand, upCard);
+            }
+
+            else if (hand.Value == 17)
+            {
+                return handValue17(count, hand, upCard);
+            }
+
+            else if (hand.Value == 18)
+            {
+                return handValue18(count, hand, upCard);
+            }
+
+            else if (hand.Value == 19)
+            {
+                return handValue19(count, hand, upCard);
+            }
+
             else
             {
-                //TODO
                 return HandAction.STAND;
             }
         }
@@ -199,16 +224,13 @@ namespace Game.Strategy
             }
             else
             {
-                if (((int)upCard.GetCardValue() >= 2 || (int)upCard.GetCardValue() <= 6))
+                if (((int)upCard.GetCardValue() >= 2 && (int)upCard.GetCardValue() <= 6))
                 {
                     return HandAction.STAND;
                 }
                 else
                     return HandAction.HIT;
             }
-            //TODO 
-            throw new NotImplementedException();
-
         }
 
         public HandAction handValue14(int count, Hand hand, Card upCard)
@@ -237,12 +259,124 @@ namespace Game.Strategy
             }
             else
             {
+                if (((int)upCard.GetCardValue() >= 2 && (int)upCard.GetCardValue() <= 6))
+                {
+                    return HandAction.STAND;
+                }
+                else
+                    return HandAction.HIT;
+            }
+        }
+
+        public HandAction handValue15(int count, Hand hand, Card upCard)
+        {
+            if (hand.IsSoft)
+            {
+                if (((int)upCard.GetCardValue() == 2 || (int)upCard.GetCardValue() == 3) || (int)upCard.GetCardValue() >= 7)
+                {
+                    return HandAction.HIT;
+                }
+                else
+                    return HandAction.DOUBLE_DOWN;
+            }
+            else
+            {
                 if (((int)upCard.GetCardValue() >= 2 || (int)upCard.GetCardValue() <= 6))
                 {
                     return HandAction.STAND;
                 }
                 else
                     return HandAction.HIT;
+            }
+        }
+
+        public HandAction handValue16(int count, Hand hand, Card upCard)
+        {
+            if (hand.IsSoft)
+            {
+                if (((int)upCard.GetCardValue() == 2 || (int)upCard.GetCardValue() == 3) || (int)upCard.GetCardValue() >= 7)
+                {
+                    return HandAction.HIT;
+                }
+                else
+                    return HandAction.DOUBLE_DOWN;
+            }
+            else if (hand.CanSplit())
+            {
+                return HandAction.SPLIT;
+            }
+            else
+            {
+                if (((int)upCard.GetCardValue() >= 2 && (int)upCard.GetCardValue() <= 6))
+                {
+                    return HandAction.STAND;
+                }
+                else
+                    return HandAction.HIT;
+            }
+        }
+
+        public HandAction handValue17(int count, Hand hand, Card upCard)
+        {
+            if (hand.IsSoft)
+            {
+                if ((int)upCard.GetCardValue() >= 7)
+                {
+                    return HandAction.HIT;
+                }
+                else
+                    return HandAction.DOUBLE_DOWN;
+            }
+            else
+            {
+                return HandAction.STAND;
+            }
+        }
+
+        public HandAction handValue18(int count, Hand hand, Card upCard)
+        {
+            if (hand.IsSoft)
+            {
+                if (((int)upCard.GetCardValue() >= 3) && (int)upCard.GetCardValue() <= 6)
+                {
+                    return HandAction.DOUBLE_DOWN;
+                }
+                else if ((int)upCard.GetCardValue() == 2 || (int)upCard.GetCardValue() == 7 || (int)upCard.GetCardValue() == 8)
+                {
+                    return HandAction.STAND;
+                }
+                else
+                    return HandAction.HIT;
+            }
+            else if (hand.CanSplit())
+            {
+                if ((int)upCard.GetCardValue() == 7 || (int)upCard.GetCardValue() == 10 || upCard.GetCardValue().Equals(CardType.ACE))
+                {
+                    return HandAction.STAND;
+                }
+                else
+                    return HandAction.SPLIT;
+            }
+            else
+            {
+                return HandAction.STAND;
+            }
+        }
+
+        public HandAction handValue19(int count, Hand hand, Card upCard)
+        {
+            if (hand.IsSoft)
+            {
+                if ((int)upCard.GetCardValue() == 7)
+                {
+                    return HandAction.DOUBLE_DOWN;
+                }
+                else
+                    return HandAction.STAND;
+            }
+            else
+            {
+                return HandAction.STAND;
             }
         }
     }
