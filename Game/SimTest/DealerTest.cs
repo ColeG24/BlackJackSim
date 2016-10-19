@@ -15,10 +15,10 @@ namespace SimTest
             Dealer dealer = new Dealer(new DealerStrategy());
             dealer.SetDeck(new Deck(1));
             dealer.DoInitialDraw();
-            dealer.PlayOutRound();
+            dealer.PlayOutRound(dealer.FaceUpCard);
             Card card = dealer.FaceUpCard;
             int score = dealer.RoundValue;
-            dealer.EndRound(score, false);
+            dealer.EndRound(score);
             Assert.IsTrue(score >= 17);
         }
 

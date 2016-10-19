@@ -15,11 +15,22 @@ namespace Game.participants
         private IList<Hand> hands = new List<Hand>();
         private int count;
         private Card upCard;
-        private decimal balance;
+        public decimal Balance
+        {
+            get;
+            private set;
+        }
+        public string name
+        {
+            get;
+            private set;
+        }
+
         private decimal insuranceBet;
 
-        public Player(AbstractStrategy strategy) : base(strategy)
+        public Player(AbstractStrategy strategy, string name) : base(strategy)
         {
+            this.name = name;
         }
 
         public void ResetCount()
@@ -44,6 +55,8 @@ namespace Game.participants
                     hand1.HitsLeft = 1;
                     hand2.HitsLeft = 1;
                 }
+                hands.Add(hand1);
+                hands.Add(hand2);
             }
             else
             {
@@ -80,15 +93,15 @@ namespace Game.participants
             {
                 if (hand.Value > 21)
                 {
-                    balance -= hand.CurrentBet;
+                    Balance -= hand.CurrentBet;
                 }
                 else if (hand.Value > dealerValue || dealerValue > 21)
                 {
-                    balance += hand.CurrentBet;
+                    Balance += hand.CurrentBet;
                 }
                 else if (hand.Value < dealerValue)
                 {
-                    balance -= hand.CurrentBet;
+                    Balance -= hand.CurrentBet;
                 }
             }
 
@@ -106,7 +119,7 @@ namespace Game.participants
 
         public bool TakeInsurance(Card dealerUpCard)
         {
-            if (upCard.TypeOfCard == CardType.ACE)
+            if (dealerUpCard.TypeOfCard == CardType.ACE)
             {
                 if (strategy.TakeInsurance(count, hands[0]))
                 {
@@ -122,7 +135,8 @@ namespace Game.participants
             HandAction action = strategy.DetermineActionForHand(count, hand, upCard);
             while (action != HandAction.STAND)
             {
-               switch(action)
+                action = strategy.DetermineActionForHand(count, hand, upCard);
+                switch (action)
                 {
                     case HandAction.HIT:
                         if (Hit(hand))
@@ -168,11 +182,11 @@ namespace Game.participants
         {
             if (dealerHasBlackjack)
             {
-                balance += insuranceBet * 2;
+                Balance += insuranceBet * 2;
             }
             else
             {
-                balance -= insuranceBet;
+                Balance -= insuranceBet;
             }
         }
 

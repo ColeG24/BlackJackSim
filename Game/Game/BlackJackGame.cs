@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    public class Game
+    public class BlackJackGame
     {
         private IList<Player> players;
-        public Game(int roundsToPlay, IList<Player> players, Deck deck, double penetrationPercent)
+        public BlackJackGame(int roundsToPlay, IList<Player> players, Deck deck, double penetrationPercent)
         {
             this.players = players;
 
@@ -63,6 +63,7 @@ namespace Game
                     if (hasBlackJack) // Then end round
                     {
                         dealer.EndRound(dealer.RoundValue);
+                        roundsToPlay--;
                         continue;
                     }
                 }
@@ -80,6 +81,7 @@ namespace Game
                 }
 
                 dealer.EndRound(dealer.RoundValue);
+                roundsToPlay--;
             }
         }
     }

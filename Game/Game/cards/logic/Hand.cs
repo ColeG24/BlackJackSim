@@ -23,6 +23,7 @@ namespace Game.cards.logic
         {
             InitialBet = initialBet;
             CurrentBet = initialBet;
+            HitsLeft = 100;
         }
 
         public decimal InitialBet
@@ -48,45 +49,48 @@ namespace Game.cards.logic
         /// </summary>
         public int Value
         {
-            get
+            get;
+            private set;
+        }
+
+        private void SetHandValue()
+        {
+            int val = 0;
+            bool soft = false;
+            foreach (Card card in hand)
             {
-                int value = 0;
-                bool soft = false;
-                foreach(Card card in hand)
+                Object cardValue = card.GetCardValue();
+                if (cardValue is int)
                 {
-                    Object cardValue = card.GetCardValue();
-                    if (cardValue is int)
+                    val += (int)cardValue;
+                }
+                else if (cardValue is CardType)
+                {
+                    CardType cardType = (CardType)cardValue;
+                    if (cardType == CardType.ACE)
                     {
-                        value += (int)cardValue;
-                    }
-                    else if (cardValue is CardType)
-                    {
-                        CardType cardType = (CardType)cardValue;
-                        if (cardType == CardType.ACE)
+                        int aceValue = DetermineValueOfAce(val);
+                        if (aceValue == 1)
                         {
-                            int aceValue = DetermineValueOfAce(value);
-                            if (aceValue == 1)
-                            {
-                                soft = soft && false; // If the hand is soft already, dont change that
-                            }
-                            else
-                            {
-                                soft = true;
-                            }
-                            value += aceValue;
+                            soft = soft && false; // If the hand is soft already, dont change that
                         }
                         else
                         {
-                            throw new Exception("The card in hand did not have an int value and is not an ace");
+                            soft = true;
                         }
+                        val += aceValue;
                     }
                     else
                     {
                         throw new Exception("The card in hand did not have an int value and is not an ace");
                     }
                 }
-                return value;
+                else
+                {
+                    throw new Exception("The card in hand did not have an int value and is not an ace");
+                }
             }
+            Value = val;
         }
 
         private int DetermineValueOfAce(int value)
@@ -104,6 +108,7 @@ namespace Game.cards.logic
         public void AddCard(Card card)
         {
             hand.Add(card);
+            SetHandValue();
         }
 
         public IEnumerable<Card> GetCards()

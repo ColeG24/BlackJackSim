@@ -9,7 +9,7 @@ using Game.participants.actions;
 
 namespace Game.Strategy
 {
-    class BasicStrategy : AbstractStrategy
+    public class BasicStrategy : AbstractStrategy
     {
         public override decimal BetAmount(int count)
         {
@@ -74,6 +74,11 @@ namespace Game.Strategy
             {
                 return handValue14(count, hand, upCard);
             }
+            else
+            {
+                //TODO
+                return HandAction.STAND;
+            }
         }
 
         public override int GetCountValueOfCard(Card card)
@@ -83,7 +88,7 @@ namespace Game.Strategy
 
         public override bool TakeInsurance(int count, Hand hand)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public HandAction handValue4(int count, Hand hand, Card upCard)

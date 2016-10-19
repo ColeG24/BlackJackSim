@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimTest", "SimTest\SimTest.csproj", "{4E9FF0E6-0C8D-4359-90D3-6B7ED185189F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackJackConsoleApp", "BlackJackConsoleApp\BlackJackConsoleApp.csproj", "{60940B3A-608B-44DC-BA22-DF1613B1F936}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4E9FF0E6-0C8D-4359-90D3-6B7ED185189F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E9FF0E6-0C8D-4359-90D3-6B7ED185189F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E9FF0E6-0C8D-4359-90D3-6B7ED185189F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60940B3A-608B-44DC-BA22-DF1613B1F936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60940B3A-608B-44DC-BA22-DF1613B1F936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60940B3A-608B-44DC-BA22-DF1613B1F936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60940B3A-608B-44DC-BA22-DF1613B1F936}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
