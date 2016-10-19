@@ -9,6 +9,22 @@ namespace Game.cards.logic
     public class Hand
     {
         private IList<Card> hand = new List<Card>();
+
+        /// <summary>
+        /// The amount of hits that the hand can take. (After splitting an ace, you can only hit once)
+        /// </summary>
+        public int HitsLeft
+        {
+            get;
+            set;
+        }
+
+        public Hand(decimal initialBet)
+        {
+            InitialBet = initialBet;
+            CurrentBet = initialBet;
+        }
+
         public decimal InitialBet
         {
             get;
@@ -19,11 +35,6 @@ namespace Game.cards.logic
         {
             get;
             set;
-        }
-
-        public Hand(decimal initialBet)
-        {
-            InitialBet = initialBet;
         }
 
         public bool IsSoft
@@ -106,6 +117,17 @@ namespace Game.cards.logic
         public bool CanSplit()
         {
             return hand.Count == 2 && hand[0].TypeOfCard == hand[1].TypeOfCard;
+        }
+
+
+        public bool CanHit()
+        {
+            return HitsLeft > 0;
+        }
+
+        public bool IsBlackJack()
+        {
+            return hand.Count == 2 && this.Value == 21;
         }
     }
 }

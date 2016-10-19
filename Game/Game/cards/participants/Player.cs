@@ -16,9 +16,16 @@ namespace Game.participants
         private int count;
         private Card upCard;
         private decimal balance;
+        private bool takingInsurance;
 
         public Player(Deck deck, AbstractStrategy strategy) : base(deck, strategy)
         {
+        }
+
+        public bool DealerHasBlackJack
+        {
+            private get;
+            set;
         }
 
         private void Split(Hand hand)
@@ -28,10 +35,16 @@ namespace Game.participants
             {
                 hands.Remove(originalHand);
                 Hand hand1 = new Hand(originalHand.InitialBet);
-                hand1.AddCard(originalHand.GetCards().First());
-
+                Card card1 = originalHand.GetCards().First();
+                hand1.AddCard(card1);
                 Hand hand2 = new Hand(originalHand.InitialBet);
                 hand2.AddCard(originalHand.GetCards().Last());
+
+                if (card1.TypeOfCard == CardType.ACE)
+                {
+                    hand1.HitsLeft = 1;
+                    hand2.HitsLeft = 1;
+                }
             }
             else
             {
@@ -47,10 +60,14 @@ namespace Game.participants
         /// <returns>If hitting would cause a bust</returns>
         private bool Hit(Hand hand)
         {
-            Hand originalHand = hand;
+            if (!hand.CanHit())
+            {
+                throw new Exception("You can not hit this hand noob");
+            }
             if (hand.Value <= 21)
             {
                 hand.AddCard(deck.Draw());
+                hand.HitsLeft--;
                 return hand.Value <= 21;
             }
             else
@@ -101,7 +118,7 @@ namespace Game.participants
                         }
                     case HandAction.SPLIT:
                         Split(hand);
-                        PlayOutHand(hands[hands.Count - 2]);
+                        PlayOutHand(hands[hands.Count - 1]);
                         PlayOutHand(hands[hands.Count - 2]);
                         return;
                     case HandAction.DOUBLE_DOWN:
@@ -129,5 +146,12 @@ namespace Game.participants
             hand.AddCard(deck.Draw());
             hands.Add(hand);
         }
+
+        public bool HasBlackJack(Hand hand)
+        {
+            return hand.IsBlackJack();
+        }
+
+}
     }
 }

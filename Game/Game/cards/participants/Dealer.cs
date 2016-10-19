@@ -54,5 +54,12 @@ namespace Game.participants
             hand.AddCard(deck.Draw());
             FaceUpCard = hand.GetCards().First();
         }
+
+        public bool CanTakeInsurance()
+        {
+            return FaceUpCard.TypeOfCard == CardType.ACE;
+        }
+
+
     }
 }

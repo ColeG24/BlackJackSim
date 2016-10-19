@@ -27,6 +27,15 @@ namespace Game.cards
             ShuffleDeck();
         }
 
+        public Deck(List<Card> cards)
+        {
+            foreach(Card card in cards)
+            {
+                originalDeck.Add(card);
+            }
+            ShuffleDeck();
+        }
+
         public void ShuffleDeck()
         {
             Random rng = new Random();

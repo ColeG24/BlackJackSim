@@ -46,9 +46,9 @@
     <Compile Include="cards\logic\Hand.cs" />
     <Compile Include="cards\Suit.cs" />
     <Compile Include="Strategy\actions\HandAction.cs" />
-    <Compile Include="participants\Dealer.cs" />
-    <Compile Include="participants\Participant.cs" />
-    <Compile Include="participants\Player.cs" />
+    <Compile Include="cards\participants\Dealer.cs" />
+    <Compile Include="cards\participants\Participant.cs" />
+    <Compile Include="cards\participants\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategy\AbstractStrategy.cs" />
     <Compile Include="Strategy\DealerStrategy.cs" />
