@@ -11,7 +11,7 @@ namespace Game.Strategy
 {
     abstract class AbstractStrategy
     {
-        public abstract HandAction DetermineActionForHand(int count, Hand hand);
+        public abstract HandAction DetermineActionForHand(int count, Hand hand, Card upCard);
 
         public abstract bool TakeInsurance(int count, Hand hand);
 
