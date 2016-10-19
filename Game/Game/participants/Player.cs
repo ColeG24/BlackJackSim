@@ -37,5 +37,13 @@ namespace Game.participants
         {
             throw new NotImplementedException();
         }
+
+        public override void PlayOutRound()
+        {
+            while (strategy.DetermineActionForHand() != HandAction.STAND)
+            {
+
+            }
+        }
     }
 }

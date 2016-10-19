@@ -26,5 +26,9 @@ namespace Game.participants
         /// <param name="isBlackJack">IF the dealer had black jack</param>
         public abstract void EndRound(int dealerValue, bool isBlackJack);
 
+        public abstract void PlayOutRound();
+
+        public abstract void DoInitialDraw();
+
     }
 }
