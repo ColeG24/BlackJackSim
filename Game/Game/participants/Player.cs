@@ -10,7 +10,7 @@ using Game.Strategy;
 
 namespace Game.participants
 {
-    class Player: Participant
+    public class Player: Participant
     {
         private IList<Hand> hands = new List<Hand>();
         private int count;
