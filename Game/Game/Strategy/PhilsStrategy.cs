@@ -9,33 +9,35 @@ using Game.participants.actions;
 
 namespace Game.Strategy
 {
-    class DealerStrategy : AbstractStrategy
+    class PhilsStrategy : AbstractStrategy
     {
         public override decimal BetAmount(int count)
         {
-            return 0;
+            if (count > 5)
+            {
+                return 15;
+            }
+            else
+                return 5;
         }
 
         public override HandAction DetermineActionForHand(int count, Hand hand, Card upCard)
         {
-            if (hand.Value < 17 && hand.IsSoft == true)
+            if (hand.Value == 3)
             {
-                return HandAction.STAND;
-            } 
-            else
-            {
-                return HandAction.HIT;
+
             }
+            throw new NotImplementedException();
         }
 
         public override int GetCountValueOfCard(Card card)
         {
-            return 0;
+            throw new NotImplementedException();
         }
 
         public override bool TakeInsurance(int count, Hand hand)
         {
-            return false;
+            throw new NotImplementedException();
         }
     }
 }
