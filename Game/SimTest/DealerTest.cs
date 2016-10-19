@@ -12,7 +12,8 @@ namespace SimTest
         [TestMethod]
         public void BasicTest()
         {
-            Dealer dealer = new Dealer(new Deck(1), new DealerStrategy());
+            Dealer dealer = new Dealer(new DealerStrategy());
+            dealer.SetDeck(new Deck(1));
             dealer.DoInitialDraw();
             dealer.PlayOutRound();
             Card card = dealer.FaceUpCard;

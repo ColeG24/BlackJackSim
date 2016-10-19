@@ -13,9 +13,8 @@ namespace Game.participants
         protected Deck deck;
         protected AbstractStrategy strategy;
 
-        protected Participant(Deck deck, AbstractStrategy strategy)
+        protected Participant(AbstractStrategy strategy)
         {
-            this.deck = deck;
             this.strategy = strategy;
         }
 
@@ -23,12 +22,16 @@ namespace Game.participants
         /// Used to signify the end of the round
         /// </summary>
         /// <param name="dealerValue">The points that the dealers hand adds up to</param>
-        /// <param name="isBlackJack">IF the dealer had black jack</param>
-        public abstract void EndRound(int dealerValue, bool isBlackJack);
+        public abstract void EndRound(int dealerValue);
 
-        public abstract void PlayOutRound();
+        public abstract void PlayOutRound(Card dealerUpCard);
 
         public abstract void DoInitialDraw();
+
+        public void SetDeck(Deck deck)
+        {
+            this.deck = deck;
+        }
 
     }
 }

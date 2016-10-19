@@ -16,16 +16,15 @@ namespace Game.participants
         private int count;
         private Card upCard;
         private decimal balance;
-        private bool takingInsurance;
+        private decimal insuranceBet;
 
-        public Player(Deck deck, AbstractStrategy strategy) : base(deck, strategy)
+        public Player(AbstractStrategy strategy) : base(strategy)
         {
         }
 
-        public bool DealerHasBlackJack
+        public void ResetCount()
         {
-            private get;
-            set;
+            count = 0;
         }
 
         private void Split(Hand hand)
@@ -49,7 +48,6 @@ namespace Game.participants
             else
             {
                 throw new Exception("You can not split noob");
-
             }
         }
 
@@ -76,7 +74,7 @@ namespace Game.participants
             }
         }
 
-        public override void EndRound(int dealerValue, bool isBlackJack)
+        public override void EndRound(int dealerValue)
         {
             foreach(Hand hand in hands)
             {
@@ -93,11 +91,30 @@ namespace Game.participants
                     balance -= hand.CurrentBet;
                 }
             }
+
+            // Reset player to preround state
+            hands.Clear();
+            insuranceBet = 0;
+            upCard = null;
         }
 
-        public override void PlayOutRound()
+        public override void PlayOutRound(Card dealerUpCard)
         {
+            this.upCard = dealerUpCard;
             PlayOutHand(hands[0]);
+        }
+
+        public bool TakeInsurance(Card dealerUpCard)
+        {
+            if (upCard.TypeOfCard == CardType.ACE)
+            {
+                if (strategy.TakeInsurance(count, hands[0]))
+                {
+                    insuranceBet = hands[0].InitialBet / 2;
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void PlayOutHand(Hand hand)
@@ -147,11 +164,22 @@ namespace Game.participants
             hands.Add(hand);
         }
 
+        public void AdjustBalanceFromInsuranceBet(bool dealerHasBlackjack)
+        {
+            if (dealerHasBlackjack)
+            {
+                balance += insuranceBet * 2;
+            }
+            else
+            {
+                balance -= insuranceBet;
+            }
+        }
+
         public bool HasBlackJack(Hand hand)
         {
             return hand.IsBlackJack();
         }
 
-}
     }
 }

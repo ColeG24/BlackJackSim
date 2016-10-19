@@ -25,18 +25,18 @@ namespace Game.participants
             private set;
         }
 
-        public Dealer(Deck deck, DealerStrategy strategy) : base(deck, strategy)
+        public Dealer(DealerStrategy strategy) : base(strategy)
         {
         }
 
-        public override void EndRound(int dealerValue, bool isBlackJack)
+        public override void EndRound(int dealerValue)
         {
             FaceUpCard = null; // no face up card at the end of round
             RoundValue = 0;
             hand = new Hand(0);
         }
 
-        public override void PlayOutRound()
+        public override void PlayOutRound(Card upCard)
         {
             while (strategy.DetermineActionForHand(0, hand, FaceUpCard) != HandAction.STAND)
             {
@@ -58,6 +58,11 @@ namespace Game.participants
         public bool CanTakeInsurance()
         {
             return FaceUpCard.TypeOfCard == CardType.ACE;
+        }
+
+        public bool HasBlackJack()
+        {
+            return hand.GetCards().Count() == 2 && hand.Value == 21;
         }
 
 
