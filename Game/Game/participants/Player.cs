@@ -15,6 +15,8 @@ namespace Game.participants
         private IList<Hand> hands = new List<Hand>();
         private int count;
         private Card upCard;
+        
+
         public decimal Balance
         {
             get;
@@ -128,6 +130,25 @@ namespace Game.participants
                 }
             }
             return false;
+        }
+
+        public IEnumerable<Card> GetCurrentRoundCards()
+        {
+            foreach (Hand hand in hands)
+            {
+                foreach(Card card in hand.GetCards())
+                {
+                    yield return card;
+                }
+            }
+        }
+
+        public void AdjustCount(IEnumerable<Card> cardsSeen)
+        {
+            foreach(Card card in cardsSeen)
+            {
+                count += strategy.GetCountValueOfCard(card);
+            }
         }
 
         private void PlayOutHand(Hand hand)

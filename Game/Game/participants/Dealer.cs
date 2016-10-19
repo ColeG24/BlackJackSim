@@ -65,6 +65,12 @@ namespace Game.participants
             return hand.GetCards().Count() == 2 && hand.Value == 21;
         }
 
-
+        public IEnumerable<Card> GetCurrentRoundCards()
+        {
+             foreach (Card card in hand.GetCards())
+            {
+                yield return card;
+            } 
+        }
     }
 }
