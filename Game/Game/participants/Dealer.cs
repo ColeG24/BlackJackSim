@@ -25,14 +25,14 @@ namespace Game.participants
 
         public override void EndRound(int dealerValue, bool isBlackJack)
         {
-            FaceUpCard = null;
+            FaceUpCard = null; // no face up card at the end of round
         }
 
         public override void PlayOutRound()
         {
-            while (strategy.DetermineActionForHand(0, hand) != HandAction.STAND)
+            while (strategy.DetermineActionForHand(0, hand, FaceUpCard) != HandAction.STAND)
             {
-                if (strategy.DetermineActionForHand(0, hand) == HandAction.HIT)
+                if (strategy.DetermineActionForHand(0, hand, FaceUpCard) == HandAction.HIT)
                 {
                     hand.AddCard(deck.Draw());
                 }

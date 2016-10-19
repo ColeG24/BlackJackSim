@@ -8,6 +8,6 @@ namespace Game.participants.actions
 {
     public enum HandAction
     {
-        HIT, STAND, SPLIT, DOUBLE
+        HIT, STAND, SPLIT, DOUBLE_DOWN
     }
 }
