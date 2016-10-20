@@ -12,7 +12,7 @@ namespace Game.Strategy
     {
         public override bool TakeInsurance(int count, Hand hand)
         {
-            if (count > 10)
+            if (count > 5)
             {
                 return true;
             }
@@ -41,19 +41,19 @@ namespace Game.Strategy
         {
             if (count > 20)
             {
-                return 0;
+                return 50;
             }
             if (count > 15)
             {
-                return 0;
+                return 40;
             }
             if (count > 10)
             {
-                return 0;
+                return 30;
             }
-            else if (count > 7)
+            else if (count > 5)
             {
-                return 1;
+                return 5;
             }
             else
                 return 0;
