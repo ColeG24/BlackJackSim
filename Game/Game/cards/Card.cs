@@ -9,6 +9,7 @@ namespace Game.cards
     public class Card
     {
         private Suit suit;
+        public int CountVal;
         public CardType TypeOfCard
         {
             get;
@@ -22,6 +23,7 @@ namespace Game.cards
             this.TypeOfCard = type;
             this.bjValue = DetermineBjValue(TypeOfCard);
         }
+        
         
         public Object GetCardValue()
         {

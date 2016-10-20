@@ -78,7 +78,7 @@ namespace Game.cards
         {
             if (currentDeckState.Count < 1)
             {
-                throw new DeckOutOFCardsException();
+                    throw new DeckOutOFCardsException();
             }
             Card card = currentDeckState.ElementAt(0);
             currentDeckState.RemoveAt(0);
