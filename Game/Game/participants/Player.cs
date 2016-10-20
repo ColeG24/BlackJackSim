@@ -15,6 +15,7 @@ namespace Game.participants
         private IList<Hand> hands = new List<Hand>();
         private int count;
         private Card upCard;
+        private bool hasBJ;
         
 
         public decimal Balance
@@ -23,6 +24,11 @@ namespace Game.participants
             private set;
         }
         public string name
+        {
+            get;
+            private set;
+        }
+        public int InsuranceTaken
         {
             get;
             private set;
@@ -89,17 +95,21 @@ namespace Game.participants
             }
         }
 
-        public override void EndRound(int dealerValue)
-        {
-            foreach(Hand hand in hands)
+        public override void EndRound(int dealerValue, bool dealerHasBj)
+        {    
+            foreach (Hand hand in hands)
             {
                 if (hand.Value > 21)
                 {
                     Balance -= hand.CurrentBet;
                 }
+                else if (hasBJ && !dealerHasBj)
+                {
+                    Balance += hand.CurrentBet * 1.5M;
+                }
                 else if (hand.Value > dealerValue || dealerValue > 21)
                 {
-                    Balance += hand.CurrentBet;
+                    Balance += hand.CurrentBet; // Dealer val is not updating correctly
                 }
                 else if (hand.Value < dealerValue)
                 {
@@ -108,6 +118,7 @@ namespace Game.participants
             }
 
             // Reset player to preround state
+            hasBJ = false;
             hands.Clear();
             insuranceBet = 0;
             upCard = null;
@@ -115,6 +126,10 @@ namespace Game.participants
 
         public override void PlayOutRound(Card dealerUpCard)
         {
+            if (hasBJ)
+            {
+                return;
+            }
             this.upCard = dealerUpCard;
             PlayOutHand(hands[0]);
         }
@@ -183,12 +198,8 @@ namespace Game.participants
         private void DoubleDown(Hand hand)
         {
             hand.CurrentBet = hand.CurrentBet * 2; // Double hands current bet
+            hand.HitsLeft = 1;
             Hit(hand);
-        }
-
-        public void SetDealerUpCard(Card card)
-        {
-            upCard = card;
         }
 
         public override void DoInitialDraw()
@@ -197,6 +208,11 @@ namespace Game.participants
             hand.AddCard(deck.Draw());
             hand.AddCard(deck.Draw());
             hands.Add(hand);
+            if (hand.IsBlackJack())
+            {
+                hasBJ = true;
+            }
+
         }
 
         public void AdjustBalanceFromInsuranceBet(bool dealerHasBlackjack)
@@ -209,11 +225,6 @@ namespace Game.participants
             {
                 Balance -= insuranceBet;
             }
-        }
-
-        public bool HasBlackJack(Hand hand)
-        {
-            return hand.IsBlackJack();
         }
 
     }

@@ -13,17 +13,7 @@ namespace Game.Strategy
     {
         public override decimal BetAmount(int count)
         {
-            if (count > 10)
-            {
-                return 100;
-            }
-            else if (count > 5)
-            {
-
-                return 20;
-            }
-            else
-                return 5;
+            return 5;
         }
 
         public override HandAction DetermineActionForHand(int count, Hand hand, Card upCard)
@@ -113,29 +103,12 @@ namespace Game.Strategy
 
         public override int GetCountValueOfCard(Card card)
         {
-            switch (card.TypeOfCard)
-            {
-                case CardType.TWO: return 1;
-                case CardType.THREE: return 2;
-                case CardType.FOUR: return 2;
-                case CardType.FIVE: return 3;
-                case CardType.SIX: return 2;
-                case CardType.SEVEN: return 2;
-                case CardType.EIGHT: return 1;
-                case CardType.NINE: return -1;
-                case CardType.ACE: return 0;
-                default: return -3;
-            }
+            return 0;
         }
 
         public override bool TakeInsurance(int count, Hand hand)
         {
-            if (count > 10)
-            {
-                return true;
-            }
-            else
-                return false;
+            return false;
         }
 
         public HandAction handValue4(int count, Hand hand, Card upCard)
@@ -291,7 +264,7 @@ namespace Game.Strategy
             }
         }
 
-        public HandAction handValue15(int count, Hand hand, Card upCard)
+        public virtual HandAction handValue15(int count, Hand hand, Card upCard)
         {
             if (hand.IsSoft)
             {
@@ -313,7 +286,7 @@ namespace Game.Strategy
             }
         }
 
-        public HandAction handValue16(int count, Hand hand, Card upCard)
+        public virtual HandAction handValue16(int count, Hand hand, Card upCard)
         {
             if (hand.IsSoft)
             {

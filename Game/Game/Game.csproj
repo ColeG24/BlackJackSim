@@ -54,6 +54,8 @@
     <Compile Include="Strategy\AbstractStrategy.cs" />
     <Compile Include="Strategy\DealerStrategy.cs" />
     <Compile Include="Strategy\BasicStrategy.cs" />
+    <Compile Include="Strategy\UshtonStrategy.cs" />
+    <Compile Include="Strategy\ZenStrategy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

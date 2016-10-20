@@ -32,6 +32,7 @@ namespace Game
 
             while (roundsToPlay > 0)
             {
+                // Check if we need to reshuffle
                 double currentCardsLeft = deck.CardsLeft();
                 double currentPenetration = 1 - (currentCardsLeft / initialDeckSize);
                 if (currentPenetration > penetrationAsDouble)
@@ -63,7 +64,7 @@ namespace Game
                         }
                         if (hasBlackJack)
                         {
-                            player.EndRound(dealer.RoundValue);
+                            player.EndRound(dealer.RoundValue, hasBlackJack);
                         }
                     }
 
@@ -89,7 +90,7 @@ namespace Game
                             player.AdjustCount(cardsSeen);
                         }
 
-                        dealer.EndRound(dealer.RoundValue);
+                        dealer.EndRound(dealer.RoundValue, hasBlackJack);
                         roundsToPlay--;
                         continue;
                     }
@@ -120,9 +121,9 @@ namespace Game
                 // Ends game for players and dealer
                 foreach (Player player in players)
                 {
-                    player.EndRound(dealer.RoundValue);
+                    player.EndRound(dealer.RoundValue, false);
                 }
-                dealer.EndRound(dealer.RoundValue);
+                dealer.EndRound(dealer.RoundValue, false);
 
                 roundsToPlay--;
             }
