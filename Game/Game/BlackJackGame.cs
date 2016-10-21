@@ -32,6 +32,7 @@ namespace Game
 
             while (roundsToPlay > 0)
             {
+                // Check if we need to reshuffle
                 double currentCardsLeft = deck.CardsLeft();
                 double currentPenetration = 1 - (currentCardsLeft / initialDeckSize);
                 if (currentPenetration > penetrationAsDouble)
@@ -57,13 +58,9 @@ namespace Game
 
                     foreach (Player player in players)
                     {
-                        if (player.TakeInsurance(upCard))
+                        if (player.TakeInsurance(upCard)) // If player took insurance
                         {
-                            player.AdjustBalanceFromInsuranceBet(hasBlackJack);
-                        }
-                        if (hasBlackJack)
-                        {
-                            player.EndRound(dealer.RoundValue);
+                            player.AdjustBalanceFromInsuranceBet(hasBlackJack); // adjust balance based off if dealer had bj
                         }
                     }
 
@@ -87,9 +84,10 @@ namespace Game
                         foreach (Player player in players)
                         {
                             player.AdjustCount(cardsSeen);
+                            player.EndRound(dealer.RoundValue, hasBlackJack);
                         }
 
-                        dealer.EndRound(dealer.RoundValue);
+                        dealer.EndRound(dealer.RoundValue, hasBlackJack);
                         roundsToPlay--;
                         continue;
                     }
@@ -111,18 +109,20 @@ namespace Game
                     cardsSeenThisRound.Add(card);
                 }
 
+                // Ends game for players and dealer
+                foreach (Player player in players)
+                {
+                    player.EndRound(dealer.RoundValue, false);
+                }
+
+                dealer.EndRound(dealer.RoundValue, false);
+
+
                 //Adjust count for players
                 foreach (Player player in players)
                 {
                     player.AdjustCount(cardsSeenThisRound);
                 }
-
-                // Ends game for players and dealer
-                foreach (Player player in players)
-                {
-                    player.EndRound(dealer.RoundValue);
-                }
-                dealer.EndRound(dealer.RoundValue);
 
                 roundsToPlay--;
             }

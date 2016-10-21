@@ -29,7 +29,7 @@ namespace Game.participants
         {
         }
 
-        public override void EndRound(int dealerValue)
+        public override void EndRound(int dealerValue, bool hasBj)
         {
             FaceUpCard = null; // no face up card at the end of round
             RoundValue = 0;
@@ -53,6 +53,7 @@ namespace Game.participants
             hand.AddCard(deck.Draw());
             hand.AddCard(deck.Draw());
             FaceUpCard = hand.GetCards().First();
+            RoundValue = hand.Value;
         }
 
         public bool CanTakeInsurance()

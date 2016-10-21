@@ -22,7 +22,7 @@ namespace Game.participants
         /// Used to signify the end of the round
         /// </summary>
         /// <param name="dealerValue">The points that the dealers hand adds up to</param>
-        public abstract void EndRound(int dealerValue);
+        public abstract void EndRound(int dealerValue, bool dealerHasBj);
 
         public abstract void PlayOutRound(Card dealerUpCard);
 

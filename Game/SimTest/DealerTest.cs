@@ -18,7 +18,7 @@ namespace SimTest
             dealer.PlayOutRound(dealer.FaceUpCard);
             Card card = dealer.FaceUpCard;
             int score = dealer.RoundValue;
-            dealer.EndRound(score);
+            dealer.EndRound(score, false);
             Assert.IsTrue(score >= 17);
         }
 
