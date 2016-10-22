@@ -22,8 +22,7 @@ namespace BlackJackConsoleApp
             //Thread thread6 = new Thread(new ThreadStart(WriteGameResults));
             //Thread thread7 = new Thread(new ThreadStart(WriteGameResults));
             //Thread thread8 = new Thread(new ThreadStart(WriteGameResults));
-
-            thread1.Start();
+            
             //thread2.Start();
             //thread3.Start();
             //thread4.Start();
