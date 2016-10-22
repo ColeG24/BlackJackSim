@@ -12,16 +12,14 @@ namespace Game
     public class BlackJackGame
     {
         private IList<Player> players;
-        private int roundsToPlay;
         private Deck deck;
         private Dealer dealer;
         private double initialDeckSize;
         private double penetrationAsDouble;
 
-        public BlackJackGame(int roundsToPlay, IList<Player> players, Deck deck, double penetrationPercent)
+        public BlackJackGame(IList<Player> players, Deck deck, double penetrationPercent)
         {
             this.players = players;
-            this.roundsToPlay = roundsToPlay;
 
             initialDeckSize = deck.CardsLeft();
             penetrationAsDouble = penetrationPercent / 100;      
@@ -94,7 +92,6 @@ namespace Game
                         }
 
                     dealer.EndRound(dealer.RoundValue, hasBlackJack);
-                    roundsToPlay--;
                     return;
                 }
             }
@@ -130,10 +127,9 @@ namespace Game
                     player.AdjustCount(cardsSeenThisRound);
                 }
 
-                roundsToPlay--;
             }
 
-        public double ApproximateHoursOfPlay() // According to some website
+        public double ApproximateHoursOfPlay(int roundsToPlay) // According to some website
         {
             int numberOfPlayers = players.Count;
             double roundsPerHour;
