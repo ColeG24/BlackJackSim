@@ -160,7 +160,7 @@ namespace Game.Strategy
             }
             else
             {
-                return 0; // leave the table
+                return .5M; // leave the table 1/10 of hands
             }
         }
 

@@ -16,6 +16,7 @@ namespace Game.participants
         private int count;
         private Card upCard;
         private bool hasBJ;
+        private ISet<Card> cardsSeenThisRound = new HashSet<Card>();
         
 
         public decimal Balance
@@ -44,6 +45,7 @@ namespace Game.participants
         public void ResetCount()
         {
             count = 0;
+            cardsSeenThisRound.Clear();
         }
 
         private void Split(Hand hand)
@@ -162,7 +164,10 @@ namespace Game.participants
         {
             foreach(Card card in cardsSeen)
             {
-                count += strategy.GetCountValueOfCard(card);
+                if (!cardsSeenThisRound.Contains(card))
+                {
+                    cardsSeenThisRound.Add(card);
+                }
             }
         }
 

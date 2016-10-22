@@ -13,120 +13,126 @@ namespace Game
     {
         private IList<Player> players;
         private int roundsToPlay;
+        private Deck deck;
+        private Dealer dealer;
+        private double initialDeckSize;
+        private double penetrationAsDouble;
 
         public BlackJackGame(int roundsToPlay, IList<Player> players, Deck deck, double penetrationPercent)
         {
             this.players = players;
             this.roundsToPlay = roundsToPlay;
 
-            double initialDeckSize = deck.CardsLeft();
+            initialDeckSize = deck.CardsLeft();
+            this.penetrationAsDouble = penetrationPercent;
             double penetrationAsDouble = penetrationPercent / 100;      
                 
             Dealer dealer = new Dealer(new DealerStrategy());
+            this.deck = deck;
             dealer.SetDeck(deck);
 
             foreach (Player player in players)
             {
                 player.SetDeck(deck);
             }
+        }
 
-            while (roundsToPlay > 0)
+        public void PlayRound()
+        {
+            // Check if we need to reshuffle
+            double currentCardsLeft = deck.CardsLeft();
+            double currentPenetration = 1 - (currentCardsLeft / initialDeckSize);
+            if (currentPenetration > penetrationAsDouble)
             {
-                // Check if we need to reshuffle
-                double currentCardsLeft = deck.CardsLeft();
-                double currentPenetration = 1 - (currentCardsLeft / initialDeckSize);
-                if (currentPenetration > penetrationAsDouble)
+                deck.ShuffleDeck();
+                foreach (Player player in players)
                 {
-                    deck.ShuffleDeck();
-                    foreach (Player player in players)
+                    player.ResetCount();
+                }
+            }
+
+            dealer.DoInitialDraw();
+            foreach (Player player in players)
+            {
+                player.DoInitialDraw();
+            }
+
+            Card upCard = dealer.FaceUpCard;
+
+            if (dealer.CanTakeInsurance())
+            {
+                bool hasBlackJack = dealer.HasBlackJack();
+
+                foreach (Player player in players)
+                {
+                    if (player.TakeInsurance(upCard))
                     {
-                        player.ResetCount();
+                        player.AdjustBalanceFromInsuranceBet(hasBlackJack);
+                    }
+                    if (hasBlackJack)
+                    {
+                        player.EndRound(dealer.RoundValue, hasBlackJack);
                     }
                 }
 
-                dealer.DoInitialDraw();
-                foreach(Player player in players)
+                if (hasBlackJack) // Then end round
                 {
-                    player.DoInitialDraw();
-                }
-
-                Card upCard = dealer.FaceUpCard;
-
-                if (dealer.CanTakeInsurance())
-                {
-                    bool hasBlackJack = dealer.HasBlackJack();
-
+                    // Track cards that were seen
+                    IList<Card> cardsSeen = new List<Card>();
                     foreach (Player player in players)
                     {
-                        if (player.TakeInsurance(upCard))
-                        {
-                            player.AdjustBalanceFromInsuranceBet(hasBlackJack);
-                        }
-                        if (hasBlackJack)
-                        {
-                            player.EndRound(dealer.RoundValue, hasBlackJack);
-                        }
-                    }
-
-                    if (hasBlackJack) // Then end round
-                    {
-                        // Track cards that were seen
-                        IList<Card> cardsSeen = new List<Card>();
-                        foreach (Player player in players)
-                        {
-                            foreach (Card card in player.GetCurrentRoundCards())
-                            {
-                                cardsSeen.Add(card);
-                            }
-                        }
-                        foreach (Card card in dealer.GetCurrentRoundCards())
+                        foreach (Card card in player.GetCurrentRoundCards())
                         {
                             cardsSeen.Add(card);
                         }
-
-                        //Adjust count for players
-                        foreach (Player player in players)
-                        {
-                            player.AdjustCount(cardsSeen);
-                        }
-
-                        dealer.EndRound(dealer.RoundValue, hasBlackJack);
-                        roundsToPlay--;
-                        continue;
                     }
-                }
-
-                // Play out round for dealer and player, and track cards seen
-                IList<Card> cardsSeenThisRound = new List<Card>();
-                foreach (Player player in players)
-                {
-                    player.PlayOutRound(upCard);
-                    foreach(Card card in player.GetCurrentRoundCards())
+                    foreach (Card card in dealer.GetCurrentRoundCards())
                     {
-                        cardsSeenThisRound.Add(card);
+                        cardsSeen.Add(card);
                     }
+
+                    //Adjust count for players
+                    foreach (Player player in players)
+                    {
+                        player.AdjustCount(cardsSeen);
+                    }
+
+                    dealer.EndRound(dealer.RoundValue, hasBlackJack);
+                    roundsToPlay--;
+                    return;
                 }
-                dealer.PlayOutRound(upCard);
-                foreach (Card card in dealer.GetCurrentRoundCards())
+            }
+
+            // Play out round for dealer and player, and track cards seen
+            IList<Card> cardsSeenThisRound = new List<Card>();
+            foreach (Player player in players)
+            {
+                player.PlayOutRound(upCard);
+                foreach (Card card in player.GetCurrentRoundCards())
                 {
                     cardsSeenThisRound.Add(card);
                 }
-
-                //Adjust count for players
-                foreach (Player player in players)
-                {
-                    player.AdjustCount(cardsSeenThisRound);
-                }
-
-                // Ends game for players and dealer
-                foreach (Player player in players)
-                {
-                    player.EndRound(dealer.RoundValue, false);
-                }
-                dealer.EndRound(dealer.RoundValue, false);
-
-                roundsToPlay--;
             }
+            dealer.PlayOutRound(upCard);
+            foreach (Card card in dealer.GetCurrentRoundCards())
+            {
+                cardsSeenThisRound.Add(card);
+            }
+
+            //Adjust count for players
+            foreach (Player player in players)
+            {
+                player.AdjustCount(cardsSeenThisRound);
+            }
+
+            // Ends game for players and dealer
+            foreach (Player player in players)
+            {
+                player.EndRound(dealer.RoundValue, false);
+            }
+            dealer.EndRound(dealer.RoundValue, false);
+
+            roundsToPlay--;
         }
 
         public double ApproximateHoursOfPlay() // According to some website

@@ -40,7 +40,7 @@ namespace BlackJackConsoleApp
             players.Add(player1);
            // players.Add(player2);
 
-            BlackJackGame game = new BlackJackGame(1000000, players, deck, 80.0);
+            BlackJackGame game = new BlackJackGame(1000000, players, deck, 60.0);
 
             foreach (Player player in players)
             {
