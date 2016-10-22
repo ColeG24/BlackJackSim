@@ -95,7 +95,7 @@ namespace Game.cards.logic
 
         private int DetermineValueOfAce(int value)
         {
-            if (value + 11 < 21)
+            if (value + 11 <= 21)
             {
                 return 11;
             }

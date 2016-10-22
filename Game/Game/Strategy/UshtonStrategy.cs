@@ -56,7 +56,7 @@ namespace Game.Strategy
                 return 5;
             }
             else
-                return 0;
+                return 1;
         }
 
     }

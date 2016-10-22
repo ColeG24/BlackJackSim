@@ -31,7 +31,7 @@ namespace Game.cards
         /// Used to make
         /// </summary>
         /// <param name="cards"></param>
-        public Deck(List<Card> cards)
+        public Deck(IList<Card> cards)
         {
             foreach(Card card in cards)
             {

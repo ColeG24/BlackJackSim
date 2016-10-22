@@ -46,10 +46,15 @@ namespace BlackJackConsoleApp
             Deck deck = new Deck(1);
 
             IList<Player> players = new List<Player>();
-            players.Add(player1);
+          //  players.Add(player1);
             players.Add(player2);
 
-            BlackJackGame game = new BlackJackGame(1000000, players, deck, 60.0);
+            BlackJackGame game = new BlackJackGame(1000000, players, deck, 50.0);
+
+            for (int i = 0; i < 10000; i++)
+            {
+                game.PlayRound();
+            }
 
             foreach (Player player in players)
             {

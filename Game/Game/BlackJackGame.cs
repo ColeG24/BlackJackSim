@@ -24,10 +24,9 @@ namespace Game
             this.roundsToPlay = roundsToPlay;
 
             initialDeckSize = deck.CardsLeft();
-            this.penetrationAsDouble = penetrationPercent;
-            double penetrationAsDouble = penetrationPercent / 100;      
+            penetrationAsDouble = penetrationPercent / 100;      
                 
-            Dealer dealer = new Dealer(new DealerStrategy());
+            dealer = new Dealer(new DealerStrategy());
             this.deck = deck;
             dealer.SetDeck(deck);
 
