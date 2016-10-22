@@ -38,13 +38,18 @@ namespace BlackJackConsoleApp
 
         }
 
-        private static void WriteGameResultsPhilsVersion()
+        private static void WriteGameResults()
         {
-           // Player player1 = new Player(new ZenStrategy(), "Bob");
+           
+        }
+
+        private static void writeGameResultsPerRound()
+        {
+            // Player player1 = new Player(new ZenStrategy(), "Bob");
             Player player2 = new Player(new UshtonStrategy(), "John");
             // players.Add(player1);
             // players.Add(player2);
-            
+
             int numOfPlayers = 7;
             int numOfRounds = 2;
             while (numOfPlayers > 0)
