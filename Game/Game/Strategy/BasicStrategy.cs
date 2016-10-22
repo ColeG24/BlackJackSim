@@ -363,7 +363,7 @@ namespace Game.Strategy
         {
             if (hand.IsSoft)
             {
-                if ((int)upCard.GetCardValue() == 7)
+                if ((int)upCard.GetCardValue() == 6)
                 {
                     return HandAction.DOUBLE_DOWN;
                 }

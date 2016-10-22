@@ -16,8 +16,13 @@ namespace Game.participants
         private int count;
         private Card upCard;
         private bool hasBJ;
+        private Dictionary<int, double> countratio = new Dictionary<int, double>();
+        private Dictionary<int, int> insuranceRatio = new Dictionary<int, int>();
+        private int currentRoundMultiplier = 1;
+
         private ISet<Card> cardsSeenThisRound = new HashSet<Card>();
         
+
 
         public decimal Balance
         {
@@ -98,33 +103,57 @@ namespace Game.participants
         }
 
         public override void EndRound(int dealerValue, bool dealerHasBj)
-        {    
+        {
+            if (!countratio.ContainsKey(count))
+            {
+                countratio.Add(count, 0);
+            }
             foreach (Hand hand in hands)
             {
                 if (hand.Value > 21)
                 {
+                    countratio[count] -= currentRoundMultiplier;
+                    double currentCount = countratio[count];
                     Balance -= hand.CurrentBet;
                 }
                 else if (hasBJ && !dealerHasBj)
                 {
+                    countratio[count] = countratio[count] + 1.5;
+                    double currentCount = countratio[count];
                     Balance += hand.CurrentBet * 1.5M;
                 }
                 else if (hand.Value > dealerValue || dealerValue > 21)
                 {
+                    countratio[count] += currentRoundMultiplier;
+                    double currentCount = countratio[count];
                     Balance += hand.CurrentBet; // Dealer val is not updating correctly
                 }
                 else if (hand.Value < dealerValue)
                 {
+                    countratio[count] -= currentRoundMultiplier;
+                    double currentCount = countratio[count];
                     Balance -= hand.CurrentBet;
                 }
             }
 
             // Reset player to preround state
+            currentRoundMultiplier = 1;
             hasBJ = false;
             hands.Clear();
             insuranceBet = 0;
             upCard = null;
         }
+
+        public double GetWinAmountFor(int count)
+        {
+            return countratio[count];
+        }
+
+        public int GetInsuranceWinAmountFor(int count)
+        {
+            return insuranceRatio[count];
+        }
+
 
         public override void PlayOutRound(Card dealerUpCard)
         {
@@ -171,6 +200,8 @@ namespace Game.participants
             }
         }
 
+
+
         private void PlayOutHand(Hand hand)
         {
             HandAction action = strategy.DetermineActionForHand(count, hand, upCard);
@@ -202,6 +233,7 @@ namespace Game.participants
 
         private void DoubleDown(Hand hand)
         {
+            currentRoundMultiplier = 2;
             hand.CurrentBet = hand.CurrentBet * 2; // Double hands current bet
             hand.HitsLeft = 1;
             Hit(hand);
@@ -209,7 +241,8 @@ namespace Game.participants
 
         public override void DoInitialDraw()
         {
-            Hand hand = new Hand(strategy.BetAmount(count));
+            decimal betAmount = strategy.BetAmount(count);
+            Hand hand = new Hand(betAmount);
             hand.AddCard(deck.Draw());
             hand.AddCard(deck.Draw());
             hands.Add(hand);
@@ -222,12 +255,18 @@ namespace Game.participants
 
         public void AdjustBalanceFromInsuranceBet(bool dealerHasBlackjack)
         {
+            if (!insuranceRatio.ContainsKey(count))
+            {
+                insuranceRatio.Add(count, 0);
+            }
             if (dealerHasBlackjack)
             {
+                insuranceRatio[count] += 2;
                 Balance += insuranceBet * 2;
             }
             else
             {
+                insuranceRatio[count]--;
                 Balance -= insuranceBet;
             }
         }

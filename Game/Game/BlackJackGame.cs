@@ -63,17 +63,13 @@ namespace Game
             {
                 bool hasBlackJack = dealer.HasBlackJack();
 
-                foreach (Player player in players)
-                {
-                    if (player.TakeInsurance(upCard))
+                    foreach (Player player in players)
                     {
-                        player.AdjustBalanceFromInsuranceBet(hasBlackJack);
+                        if (player.TakeInsurance(upCard)) // If player took insurance
+                        {
+                            player.AdjustBalanceFromInsuranceBet(hasBlackJack); // adjust balance based off if dealer had bj
+                        }
                     }
-                    if (hasBlackJack)
-                    {
-                        player.EndRound(dealer.RoundValue, hasBlackJack);
-                    }
-                }
 
                 if (hasBlackJack) // Then end round
                 {
@@ -91,11 +87,12 @@ namespace Game
                         cardsSeen.Add(card);
                     }
 
-                    //Adjust count for players
-                    foreach (Player player in players)
-                    {
-                        player.AdjustCount(cardsSeen);
-                    }
+                        //Adjust count for players
+                        foreach (Player player in players)
+                        {
+                            player.AdjustCount(cardsSeen);
+                            player.EndRound(dealer.RoundValue, hasBlackJack);
+                        }
 
                     dealer.EndRound(dealer.RoundValue, hasBlackJack);
                     roundsToPlay--;
@@ -119,18 +116,20 @@ namespace Game
                 cardsSeenThisRound.Add(card);
             }
 
-            //Adjust count for players
-            foreach (Player player in players)
-            {
-                player.AdjustCount(cardsSeenThisRound);
-            }
+                // Ends game for players and dealer
+                foreach (Player player in players)
+                {
+                    player.EndRound(dealer.RoundValue, false);
+                }
 
-            // Ends game for players and dealer
-            foreach (Player player in players)
-            {
-                player.EndRound(dealer.RoundValue, false);
-            }
-            dealer.EndRound(dealer.RoundValue, false);
+                dealer.EndRound(dealer.RoundValue, false);
+
+
+                //Adjust count for players
+                foreach (Player player in players)
+                {
+                    player.AdjustCount(cardsSeenThisRound);
+                }
 
             roundsToPlay--;
         }
