@@ -57,6 +57,7 @@
     <Compile Include="CardAndDeckTest.cs" />
     <Compile Include="PlayerTest.cs" />
     <Compile Include="DealerTest.cs" />
+    <Compile Include="BasicStrategyTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Game\Game.csproj">
