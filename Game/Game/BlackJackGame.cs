@@ -13,49 +13,54 @@ namespace Game
     {
         private IList<Player> players;
         private int roundsToPlay;
-        public double deckPen;
+        private Deck deck;
+        private Dealer dealer;
+        private double initialDeckSize;
+        private double penetrationAsDouble;
 
         public BlackJackGame(int roundsToPlay, IList<Player> players, Deck deck, double penetrationPercent)
         {
             this.players = players;
             this.roundsToPlay = roundsToPlay;
 
-            double initialDeckSize = deck.CardsLeft();
-            double penetrationAsDouble = penetrationPercent / 100;      
+            initialDeckSize = deck.CardsLeft();
+            penetrationAsDouble = penetrationPercent / 100;      
                 
-            Dealer dealer = new Dealer(new DealerStrategy());
+            dealer = new Dealer(new DealerStrategy());
+            this.deck = deck;
             dealer.SetDeck(deck);
 
             foreach (Player player in players)
             {
                 player.SetDeck(deck);
             }
+        }
 
-            while (roundsToPlay > 0)
+        public void PlayRound()
+        {
+            // Check if we need to reshuffle
+            double currentCardsLeft = deck.CardsLeft();
+            double currentPenetration = 1 - (currentCardsLeft / initialDeckSize);
+            if (currentPenetration > penetrationAsDouble)
             {
-                // Check if we need to reshuffle
-                double currentCardsLeft = deck.CardsLeft();
-                double currentPenetration = 1 - (currentCardsLeft / initialDeckSize);
-                if (currentPenetration > penetrationAsDouble)
+                deck.ShuffleDeck();
+                foreach (Player player in players)
                 {
-                    deck.ShuffleDeck();
-                    foreach (Player player in players)
-                    {
-                        player.ResetCount();
-                    }
+                    player.ResetCount();
                 }
+            }
 
-                dealer.DoInitialDraw();
-                foreach(Player player in players)
-                {
-                    player.DoInitialDraw();
-                }
+            dealer.DoInitialDraw();
+            foreach (Player player in players)
+            {
+                player.DoInitialDraw();
+            }
 
-                Card upCard = dealer.FaceUpCard;
+            Card upCard = dealer.FaceUpCard;
 
-                if (dealer.CanTakeInsurance())
-                {
-                    bool hasBlackJack = dealer.HasBlackJack();
+            if (dealer.CanTakeInsurance())
+            {
+                bool hasBlackJack = dealer.HasBlackJack();
 
                     foreach (Player player in players)
                     {
@@ -65,21 +70,21 @@ namespace Game
                         }
                     }
 
-                    if (hasBlackJack) // Then end round
+                if (hasBlackJack) // Then end round
+                {
+                    // Track cards that were seen
+                    IList<Card> cardsSeen = new List<Card>();
+                    foreach (Player player in players)
                     {
-                        // Track cards that were seen
-                        IList<Card> cardsSeen = new List<Card>();
-                        foreach (Player player in players)
-                        {
-                            foreach (Card card in player.GetCurrentRoundCards())
-                            {
-                                cardsSeen.Add(card);
-                            }
-                        }
-                        foreach (Card card in dealer.GetCurrentRoundCards())
+                        foreach (Card card in player.GetCurrentRoundCards())
                         {
                             cardsSeen.Add(card);
                         }
+                    }
+                    foreach (Card card in dealer.GetCurrentRoundCards())
+                    {
+                        cardsSeen.Add(card);
+                    }
 
                         //Adjust count for players
                         foreach (Player player in players)
@@ -88,27 +93,27 @@ namespace Game
                             player.EndRound(dealer.RoundValue, hasBlackJack);
                         }
 
-                        dealer.EndRound(dealer.RoundValue, hasBlackJack);
-                        roundsToPlay--;
-                        continue;
-                    }
+                    dealer.EndRound(dealer.RoundValue, hasBlackJack);
+                    roundsToPlay--;
+                    return;
                 }
+            }
 
-                // Play out round for dealer and player, and track cards seen
-                IList<Card> cardsSeenThisRound = new List<Card>();
-                foreach (Player player in players)
-                {
-                    player.PlayOutRound(upCard);
-                    foreach(Card card in player.GetCurrentRoundCards())
-                    {
-                        cardsSeenThisRound.Add(card);
-                    }
-                }
-                dealer.PlayOutRound(upCard);
-                foreach (Card card in dealer.GetCurrentRoundCards())
+            // Play out round for dealer and player, and track cards seen
+            IList<Card> cardsSeenThisRound = new List<Card>();
+            foreach (Player player in players)
+            {
+                player.PlayOutRound(upCard);
+                foreach (Card card in player.GetCurrentRoundCards())
                 {
                     cardsSeenThisRound.Add(card);
                 }
+            }
+            dealer.PlayOutRound(upCard);
+            foreach (Card card in dealer.GetCurrentRoundCards())
+            {
+                cardsSeenThisRound.Add(card);
+            }
 
                 // Ends game for players and dealer
                 foreach (Player player in players)
@@ -237,8 +242,7 @@ namespace Game
                     player.AdjustCount(cardsSeenThisRound);
                 }
 
-                roundsToPlay--;
-            }
+            roundsToPlay--;
         }
 
         public double ApproximateHoursOfPlay() // According to some website

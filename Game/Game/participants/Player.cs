@@ -20,6 +20,8 @@ namespace Game.participants
         private Dictionary<int, int> insuranceRatio = new Dictionary<int, int>();
         private int currentRoundMultiplier = 1;
 
+        private ISet<Card> cardsSeenThisRound = new HashSet<Card>();
+        
 
 
         public decimal Balance
@@ -48,6 +50,7 @@ namespace Game.participants
         public void ResetCount()
         {
             count = 0;
+            cardsSeenThisRound.Clear();
         }
 
         private void Split(Hand hand)
@@ -143,12 +146,20 @@ namespace Game.participants
 
         public double GetWinAmountFor(int count)
         {
-            return countratio[count];
+            if (countratio.ContainsValue(count))
+            {
+                return countratio[count];
+            }
+            return 0.0;
         }
 
         public int GetInsuranceWinAmountFor(int count)
         {
-            return insuranceRatio[count];
+            if (insuranceRatio.ContainsKey(count))
+            {
+                return insuranceRatio[count];
+            }
+            return 0;
         }
 
 
@@ -189,8 +200,12 @@ namespace Game.participants
         public void AdjustCount(IEnumerable<Card> cardsSeen)
         {
             foreach(Card card in cardsSeen)
-            {
-                count += strategy.GetCountValueOfCard(card);
+            { 
+                if (!cardsSeenThisRound.Contains(card))
+                {
+                    cardsSeenThisRound.Add(card);
+                    count += strategy.GetCountValueOfCard(card);
+                }
             }
         }
 

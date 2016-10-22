@@ -138,37 +138,25 @@ namespace Game.Strategy
 
         public override decimal BetAmount(int count)
         {
-            //if (count == 6)
-            //{
-            //    return 1;
-            //}
-            //else
-            //{
-            //    return 0;
-            //}
             if (count > 20)
-            {
-                return 50;
-            }
-            if (count > 15)
             {
                 return 40;
             }
-            if (count > 10)
+            if (count > 15)
             {
                 return 30;
             }
-            else if (count > 7)
+            if (count > 10)
             {
                 return 20;
             }
-            else if (count > 4)
+            else if (count > 7)
+            {
+                return 15;
+            }
+            else if (count > 5)
             {
                 return 5;
-            }
-            else if (count > -1)
-            {
-                return 0;
             }
             else
             {
