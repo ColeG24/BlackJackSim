@@ -39,24 +39,24 @@ namespace Game.Strategy
 
         public override decimal BetAmount(int count)
         {
-            if (count > 20)
-            {
-                return 50;
-            }
-            if (count > 15)
-            {
-                return 40;
-            }
+            //if (count > 20)
+            //{
+            //    return 50;
+            //}
+            //if (count > 15)
+            //{
+            //    return 40;
+            //}
             if (count > 10)
             {
-                return 30;
+                return 50;
             }
             else if (count > 5)
             {
                 return 5;
             }
             else
-                return 1;
+                return 2;
         }
 
     }

@@ -11,9 +11,28 @@ namespace Game.cards
         private IList<Card> originalDeck = new List<Card>();
         private IList<Card> currentDeckState = new List<Card>();
 
+        private int randomSeed = -1;
+
         public Deck(int numDecks)
         {
             for(int i = 0; i < numDecks; i++)
+            {
+                foreach (CardType type in Enum.GetValues(typeof(CardType)))
+                {
+                    foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+                    {
+                        Card card = new Card(suit, type);
+                        originalDeck.Add(card);
+                    }
+                }
+            }
+            ShuffleDeck();
+        }
+
+        public Deck(int numDecks, int randomSeed)
+        {
+            this.randomSeed = randomSeed;
+            for (int i = 0; i < numDecks; i++)
             {
                 foreach (CardType type in Enum.GetValues(typeof(CardType)))
                 {
@@ -57,7 +76,15 @@ namespace Game.cards
 
         public void ShuffleDeck()
         {
-            Random rng = new Random();
+            Random rng;
+            if (randomSeed != -1)
+            {
+                rng = new Random(randomSeed);
+            }
+            else
+            {
+                rng = new Random();
+            }
             int n = originalDeck.Count;
             while (n > 1)
             {

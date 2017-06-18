@@ -13,16 +13,19 @@ namespace Game.participants
     public class Player: Participant
     {
         private IList<Hand> hands = new List<Hand>();
-        private int count;
         private Card upCard;
         private bool hasBJ;
-        private Dictionary<int, double> countratio = new Dictionary<int, double>();
-        private Dictionary<int, int> insuranceRatio = new Dictionary<int, int>();
+        private Dictionary<int, decimal> winAtCount = new Dictionary<int, decimal>();
+        private Dictionary<int, decimal> insuranceRatio = new Dictionary<int, decimal>();
         private int currentRoundMultiplier = 1;
 
         private ISet<Card> cardsSeenThisRound = new HashSet<Card>();
-        
 
+        public int Count
+        {
+            get;
+            private set;
+        }
 
         public decimal Balance
         {
@@ -49,7 +52,7 @@ namespace Game.participants
 
         public void ResetCount()
         {
-            count = 0;
+            Count = 0;
             cardsSeenThisRound.Clear();
         }
 
@@ -104,36 +107,35 @@ namespace Game.participants
 
         public override void EndRound(int dealerValue, bool dealerHasBj)
         {
-            if (!countratio.ContainsKey(count))
+            if (!winAtCount.ContainsKey(Count))
             {
-                countratio.Add(count, 0);
+                winAtCount.Add(Count, 0);
             }
             foreach (Hand hand in hands)
             {
+                // TODO this stuff might not make sense, could be bugged
                 if (hand.Value > 21)
                 {
-                    countratio[count] -= currentRoundMultiplier;
-                    double currentCount = countratio[count];
+                    winAtCount[Count] -= hand.CurrentBet;
                     Balance -= hand.CurrentBet;
                 }
                 else if (hasBJ && !dealerHasBj)
                 {
-                    countratio[count] = countratio[count] + 1.5;
-                    double currentCount = countratio[count];
+                    decimal winAmount = hand.CurrentBet * 1.5M;
+                    winAtCount[Count] += winAmount;
                     Balance += hand.CurrentBet * 1.5M;
                 }
                 else if (hand.Value > dealerValue || dealerValue > 21)
                 {
-                    countratio[count] += currentRoundMultiplier;
-                    double currentCount = countratio[count];
+                    winAtCount[Count] += hand.CurrentBet;
                     Balance += hand.CurrentBet; // Dealer val is not updating correctly
                 }
                 else if (hand.Value < dealerValue)
                 {
-                    countratio[count] -= currentRoundMultiplier;
-                    double currentCount = countratio[count];
+                    winAtCount[Count] -= hand.CurrentBet;
                     Balance -= hand.CurrentBet;
                 }
+              
             }
 
             // Reset player to preround state
@@ -144,16 +146,16 @@ namespace Game.participants
             upCard = null;
         }
 
-        public double GetWinAmountFor(int count)
+        public decimal GetWinAmountFor(int count)
         {
-            if (countratio.ContainsValue(count))
+            if (winAtCount.ContainsKey(count))
             {
-                return countratio[count];
+                return winAtCount[count];
             }
-            return 0.0;
+            return new decimal(0);
         }
 
-        public int GetInsuranceWinAmountFor(int count)
+        public decimal GetInsuranceWinAmountFor(int count)
         {
             if (insuranceRatio.ContainsKey(count))
             {
@@ -177,7 +179,7 @@ namespace Game.participants
         {
             if (dealerUpCard.TypeOfCard == CardType.ACE)
             {
-                if (strategy.TakeInsurance(count, hands[0]))
+                if (strategy.TakeInsurance(Count, hands[0]))
                 {
                     insuranceBet = hands[0].InitialBet / 2;
                     return true;
@@ -204,7 +206,7 @@ namespace Game.participants
                 if (!cardsSeenThisRound.Contains(card))
                 {
                     cardsSeenThisRound.Add(card);
-                    count += strategy.GetCountValueOfCard(card);
+                    this.Count += strategy.GetCountValueOfCard(card);
                 }
             }
         }
@@ -213,10 +215,10 @@ namespace Game.participants
 
         private void PlayOutHand(Hand hand)
         {
-            HandAction action = strategy.DetermineActionForHand(count, hand, upCard);
+            HandAction action = strategy.DetermineActionForHand(Count, hand, upCard);
             while (action != HandAction.STAND)
             {
-                action = strategy.DetermineActionForHand(count, hand, upCard);
+                action = strategy.DetermineActionForHand(Count, hand, upCard);
                 switch (action)
                 {
                     case HandAction.HIT:
@@ -250,7 +252,7 @@ namespace Game.participants
 
         public override void DoInitialDraw()
         {
-            decimal betAmount = strategy.BetAmount(count);
+            decimal betAmount = strategy.BetAmount(Count);
             Hand hand = new Hand(betAmount);
             hand.AddCard(deck.Draw());
             hand.AddCard(deck.Draw());
@@ -264,18 +266,18 @@ namespace Game.participants
 
         public void AdjustBalanceFromInsuranceBet(bool dealerHasBlackjack)
         {
-            if (!insuranceRatio.ContainsKey(count))
+            if (!insuranceRatio.ContainsKey(Count))
             {
-                insuranceRatio.Add(count, 0);
+                insuranceRatio.Add(Count, 0);
             }
             if (dealerHasBlackjack)
             {
-                insuranceRatio[count] += 2;
+                insuranceRatio[Count] += insuranceBet * 2;
                 Balance += insuranceBet * 2;
             }
             else
             {
-                insuranceRatio[count]--;
+                insuranceRatio[Count] -= insuranceBet;
                 Balance -= insuranceBet;
             }
         }

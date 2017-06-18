@@ -29,6 +29,24 @@ namespace SimTest
         }
 
         [TestMethod]
+        public void DealerWonTest()
+        {
+            IList<Card> fixedCards = new List<Card>();
+            fixedCards.Add(new Card(Suit.DIAMOND, CardType.TEN));
+            fixedCards.Add(new Card(Suit.CLUB, CardType.TEN));
+
+            Deck deck = new Deck(fixedCards);
+            Player player = new Player(new BasicStrategy(), "test");
+            player.SetDeck(deck);
+
+            player.DoInitialDraw();
+            player.PlayOutRound(new Card(Suit.SPADE, CardType.NINE));
+            player.EndRound(20, false);
+
+            Assert.AreEqual(0, player.Balance);
+        }
+
+        [TestMethod]
         public void PlayerHasBjTest()
         {
             IList<Card> fixedCards = new List<Card>();

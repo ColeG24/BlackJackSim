@@ -66,5 +66,45 @@ namespace SimTest
             Card dealerUpCard = new Card(Suit.CLUB, CardType.KING);
             Assert.AreEqual(ha, bs.DetermineActionForHand(0, playersHand, dealerUpCard));
         }
+
+        [TestMethod]
+        public void TestDoubleDownOn11()
+        {
+            BasicStrategy bs = new BasicStrategy();
+            Hand playersHand = new Hand(0);
+            Card playersFirstCard = new Card(Suit.DIAMOND, CardType.NINE);
+            Card playersSecondCard = new Card(Suit.HEART, CardType.TWO);
+            playersHand.AddCard(playersFirstCard);
+            playersHand.AddCard(playersSecondCard);
+            Card dealerUpCard = new Card(Suit.CLUB, CardType.KING);
+            Assert.AreEqual(HandAction.DOUBLE_DOWN, bs.DetermineActionForHand(0, playersHand, dealerUpCard));
+        }
+
+        [TestMethod]
+        public void TestSplit8s()
+        {
+            BasicStrategy bs = new BasicStrategy();
+            Hand playersHand = new Hand(0);
+            Card playersFirstCard = new Card(Suit.DIAMOND, CardType.EIGHT);
+            Card playersSecondCard = new Card(Suit.HEART, CardType.EIGHT);
+            playersHand.AddCard(playersFirstCard);
+            playersHand.AddCard(playersSecondCard);
+            Card dealerUpCard = new Card(Suit.CLUB, CardType.KING);
+            Assert.AreEqual(HandAction.SPLIT, bs.DetermineActionForHand(0, playersHand, dealerUpCard));
+        }
+
+
+        [TestMethod]
+        public void TestSplitAces()
+        {
+            BasicStrategy bs = new BasicStrategy();
+            Hand playersHand = new Hand(0);
+            Card playersFirstCard = new Card(Suit.DIAMOND, CardType.ACE);
+            Card playersSecondCard = new Card(Suit.HEART, CardType.ACE);
+            playersHand.AddCard(playersFirstCard);
+            playersHand.AddCard(playersSecondCard);
+            Card dealerUpCard = new Card(Suit.CLUB, CardType.KING);
+            Assert.AreEqual(HandAction.SPLIT, bs.DetermineActionForHand(0, playersHand, dealerUpCard));
+        }
     }
 }

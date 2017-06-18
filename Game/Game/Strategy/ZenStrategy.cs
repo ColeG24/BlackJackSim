@@ -13,7 +13,7 @@ namespace Game.Strategy
     {
         public override bool TakeInsurance(int count, Hand hand)
         {
-            if (count > 4)
+            if (count >= 8)
             {
                 return true;
             }
@@ -38,129 +38,133 @@ namespace Game.Strategy
             }
         }
 
-        /// <summary>
-        ///  deviates with 15v10, 15v9
-        /// </summary>
-        public override HandAction handValue15(int count, Hand hand, Card upCard)
-        {
-            if (hand.IsSoft)
-            {
-                if (((int)upCard.GetCardValue() == 2 || (int)upCard.GetCardValue() == 3) || (int)upCard.GetCardValue() >= 7)
-                {
-                    return HandAction.HIT;
-                }
-                else
-                    return HandAction.DOUBLE_DOWN;
-            }
-            else
-            {
-                if ((int)upCard.GetCardValue() == 10) // 15v10
-                {
-                    if (count >= 6)
-                    {
-                        return HandAction.STAND;
-                    }
-                    else
-                    {
-                        return HandAction.HIT;
-                    }
-                }
-                if ((int)upCard.GetCardValue() == 9) // 15v9
-                {
-                    if (count >= 13)
-                    {
-                        return HandAction.STAND;
-                    }
-                    else
-                    {
-                        return HandAction.HIT;
-                    }
-                }
-                if (((int)upCard.GetCardValue() >= 2 || (int)upCard.GetCardValue() <= 6))
-                {
-                    return HandAction.STAND;
-                }
-                else
-                    return HandAction.HIT;
-            }
-        }
+        ///// <summary>
+        /////  deviates with 15v10, 15v9
+        ///// </summary>
+        //public override HandAction handValue15(int count, Hand hand, Card upCard)
+        //{
+        //    if (hand.IsSoft)
+        //    {
+        //        if (((int)upCard.GetCardValue() == 2 || (int)upCard.GetCardValue() == 3) || (int)upCard.GetCardValue() >= 7)
+        //        {
+        //            return HandAction.HIT;
+        //        }
+        //        else
+        //            return HandAction.DOUBLE_DOWN;
+        //    }
+        //    else
+        //    {
+        //        if ((int)upCard.GetCardValue() == 10) // 15v10
+        //        {
+        //            if (count >= 6)
+        //            {
+        //                return HandAction.STAND;
+        //            }
+        //            else
+        //            {
+        //                return HandAction.HIT;
+        //            }
+        //        }
+        //        if ((int)upCard.GetCardValue() == 9) // 15v9
+        //        {
+        //            if (count >= 13)
+        //            {
+        //                return HandAction.STAND;
+        //            }
+        //            else
+        //            {
+        //                return HandAction.HIT;
+        //            }
+        //        }
+        //        if (((int)upCard.GetCardValue() >= 2 || (int)upCard.GetCardValue() <= 6))
+        //        {
+        //            return HandAction.STAND;
+        //        }
+        //        else
+        //            return HandAction.HIT;
+        //    }
+        //}
 
-        /// <summary>
-        /// Takes count into effect for 16v10 and 16v9
-        /// <returns></returns>
-        public override HandAction handValue16(int count, Hand hand, Card upCard)
-        {
-            if (hand.IsSoft)
-            {
-                if ((int)upCard.GetCardValue() == 2 || (int)upCard.GetCardValue() == 3 || (int)upCard.GetCardValue() >= 7)
-                {
-                    return HandAction.HIT;
-                }
-                else
-                    return HandAction.DOUBLE_DOWN;
-            }
-            else if (hand.CanSplit())
-            {
-                return HandAction.SPLIT;
-            }
-            else
-            {
-                if ((int)upCard.GetCardValue() == 10) // 16v10
-                {
-                    if (count >= 0)
-                    {
-                        return HandAction.STAND;
-                    }
-                    else
-                    {
-                        return HandAction.HIT;
-                    }
-                }
-                if ((int)upCard.GetCardValue() == 9) // 16v9
-                {
-                    if (count >= 8)
-                    {
-                        return HandAction.STAND;
-                    }
-                    else
-                    {
-                        return HandAction.HIT;
-                    }
-                }
-                if (((int)upCard.GetCardValue() >= 2 && (int)upCard.GetCardValue() <= 6))
-                {
-                    return HandAction.STAND;
-                }
-                else
-                    return HandAction.HIT;
-            }
-        }
+        ///// <summary>
+        ///// Takes count into effect for 16v10 and 16v9
+        ///// <returns></returns>
+        //public override HandAction handValue16(int count, Hand hand, Card upCard)
+        //{
+        //    if (hand.IsSoft)
+        //    {
+        //        if ((int)upCard.GetCardValue() == 2 || (int)upCard.GetCardValue() == 3 || (int)upCard.GetCardValue() >= 7)
+        //        {
+        //            return HandAction.HIT;
+        //        }
+        //        else
+        //            return HandAction.DOUBLE_DOWN;
+        //    }
+        //    else if (hand.CanSplit())
+        //    {
+        //        return HandAction.SPLIT;
+        //    }
+        //    else
+        //    {
+        //        if ((int)upCard.GetCardValue() == 10) // 16v10
+        //        {
+        //            if (count >= 0)
+        //            {
+        //                return HandAction.STAND;
+        //            }
+        //            else
+        //            {
+        //                return HandAction.HIT;
+        //            }
+        //        }
+        //        if ((int)upCard.GetCardValue() == 9) // 16v9
+        //        {
+        //            if (count >= 8)
+        //            {
+        //                return HandAction.STAND;
+        //            }
+        //            else
+        //            {
+        //                return HandAction.HIT;
+        //            }
+        //        }
+        //        if (((int)upCard.GetCardValue() >= 2 && (int)upCard.GetCardValue() <= 6))
+        //        {
+        //            return HandAction.STAND;
+        //        }
+        //        else
+        //            return HandAction.HIT;
+        //    }
+        //}
 
         public override decimal BetAmount(int count)
         {
             if (count > 20)
             {
-                return 40;
+                return 100;
             }
             if (count > 15)
             {
-                return 30;
+                return 75;
             }
-            if (count > 10)
+            if (count >= 10)
             {
-                return 20;
+                return 50;
             }
-            else if (count > 7)
+            else if (count >= 8)
             {
                 return 15;
             }
-            else if (count > 5)
+            else if (count >= 8)
+            {
+                return 10;
+            }
+            else if (count >= 4)
             {
                 return 5;
             }
             else
             {
-                return 0;
+                return 2;
             }
         }
 
